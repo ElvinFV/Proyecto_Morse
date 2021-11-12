@@ -10,41 +10,41 @@ from scipy.io import wavfile
 from winsound import*
 import pyaudio 
 import wave
-def codeRecording():
+def codeRecording(Sound):
     #=============== PARAMETROS DE GRABACION ===============#
-    Format = pyaudio.paInt16 # formato en cadena de 16-bits binarios
-    Channel = 2 # Canales del microfono de Laptop
-    Rate = 44100 # Muestras de sonido tomadas por segundo (Hz)
-    Chunk = 1024 # Numero de muestras por buffer
-    Tiempo = 6 # Segundos a grabar
-    sound='Audios/claveBionica_2.wav' # Nombre del archivo a grabar
-    Audio = pyaudio.PyAudio() # Espacio para portAudio
-    #=============== INICIO DE GRABACIÓN ===============#
-    # Genera un espacio para grabar o reproducir un audio 
-    Sonido = Audio.open(format = Format, channels = Channel, rate = Rate,input = True, output = True, frames_per_buffer = Chunk)
+    # Format = pyaudio.paInt16 # formato en cadena de 16-bits binarios
+    # Channel = 2 # Canales del microfono de Laptop
+    # Rate = 44100 # Muestras de sonido tomadas por segundo (Hz)
+    # Chunk = 1024 # Numero de muestras por buffer
+    # Tiempo = 6 # Segundos a grabar
+    # sound=Sound # Nombre del archivo a grabar
+    # Audio = pyaudio.PyAudio() # Espacio para portAudio
+    # #=============== INICIO DE GRABACIÓN ===============#
+    # # Genera un espacio para grabar o reproducir un audio 
+    # Sonido = Audio.open(format = Format, channels = Channel, rate = Rate,input = True, output = True, frames_per_buffer = Chunk)
 
-    print('Inicia la grabacion')
-    datos = []
-    rec = []
-    for i in range (0, int(Rate/Chunk*Tiempo)): # Iteraciones necesarias para guardar las muestras de la grabación del Tiempo determinado
-        datos.append(Sonido.read(Chunk)) # Lectura de muestras 
-        rec.append(np.frombuffer(Sonido.read(Chunk), dtype=np.int16)) # Guardado de muestras
+    # print('Inicia la grabacion')
+    # datos = []
+    # rec = []
+    # for i in range (0, int(Rate/Chunk*Tiempo)): # Iteraciones necesarias para guardar las muestras de la grabación del Tiempo determinado
+    #     datos.append(Sonido.read(Chunk)) # Lectura de muestras 
+    #     rec.append(np.frombuffer(Sonido.read(Chunk), dtype=np.int16)) # Guardado de muestras
     
-    senal = np.hstack(rec) # Apila el arreglo por columnas
+    # senal = np.hstack(rec) # Apila el arreglo por columnas
     
-    print('Termina la grabacion')
-    Sonido.stop_stream() # Para la grabación
-    Sonido.close() # Cierra el espacio de grabación
-    Audio.terminate() # Se cierra el espacio para portAudio
-    #=============== GUARDADO EN FORMATO .WAV ===============#
-    wF = wave.open(sound, 'wb')
-    wF.setnchannels(Channel)
-    wF.setsampwidth(Audio.get_sample_size(Format))
-    wF.setframerate(Rate)
-    wF.writeframes(b''.join(datos))
-    wF.close()
+    # print('Termina la grabacion')
+    # Sonido.stop_stream() # Para la grabación
+    # Sonido.close() # Cierra el espacio de grabación
+    # Audio.terminate() # Se cierra el espacio para portAudio
+    # #=============== GUARDADO EN FORMATO .WAV ===============#
+    # wF = wave.open(sound, 'wb')
+    # wF.setnchannels(Channel)
+    # wF.setsampwidth(Audio.get_sample_size(Format))
+    # wF.setframerate(Rate)
+    # wF.writeframes(b''.join(datos))
+    # wF.close()
     #=============== NORMALIZACION ===============#
-    # muest,senal=wavfile.read('Audios/claveHola.wav')
+    muest,senal=wavfile.read(Sound)
     senalN=senal/np.max(senal)
     # plt.figure(1)
     # plt.plot(senalN)
@@ -187,8 +187,9 @@ def formacionPalabras(morse):
             letra=''
     return palabra
 plt.close("all")
+nombre='Audios/claveHola.wav'
 #=============== Programa Principal ===============#
-signal=codeRecording()
+signal=codeRecording(nombre)
 # PlaySound('Audios/claveElvin.wav', SND_FILENAME|SND_ASYNC )
 plt.figure(1)
 plt.plot(signal)
