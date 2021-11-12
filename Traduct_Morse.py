@@ -16,8 +16,8 @@ def codeRecording():
     Channel = 2 # Canales del microfono de Laptop
     Rate = 44100 # Muestras de sonido tomadas por segundo (Hz)
     Chunk = 1024 # Numero de muestras por buffer
-    Tiempo = 5 # Segundos a grabar
-    sound='Audios/claveA.wav' # Nombre del archivo a grabar
+    Tiempo = 6 # Segundos a grabar
+    sound='Audios/claveBionica_2.wav' # Nombre del archivo a grabar
     Audio = pyaudio.PyAudio() # Espacio para portAudio
     #=============== INICIO DE GRABACIÓN ===============#
     # Genera un espacio para grabar o reproducir un audio 
@@ -43,8 +43,8 @@ def codeRecording():
     wF.setframerate(Rate)
     wF.writeframes(b''.join(datos))
     wF.close()
-    
-    # muest,senal=wavfile.read('Audios/claveElvin.wav')
+    #=============== NORMALIZACION ===============#
+    # muest,senal=wavfile.read('Audios/claveHola.wav')
     senalN=senal/np.max(senal)
     # plt.figure(1)
     # plt.plot(senalN)
@@ -90,9 +90,9 @@ def signIdentify(senal):
     for i in range(0,len(letras),1):
         dif=np.abs(letras[i][0]-letras[i][1])
         print('Diferencia Interna:',dif)
-        if(dif>=4000 and dif<=8000):
+        if(dif>=1500 and dif<=6470):
             letter.append('Dot')
-        if(dif>=14000 and dif<=17000):
+        if(dif>=6471 and dif<=16000):
             letter.append('Line')
     intrm=[]
     
@@ -102,15 +102,15 @@ def signIdentify(senal):
     for i in range(0,len(letras)-1,1):
         dif=np.abs(letras[i][1]-letras[i+1][0])
         print('Diferencia Externa:',dif)
-        if(dif>=7600 and dif<=10000):
+        if(dif>=3000 and dif<=11980):
             intrm.append('Senal')
-        if(dif>=23000 and dif<=28000):
+        if(dif>=12000 and dif<=35000):
             intrm.append('Letra')
     intrm.append('Letra')
     word=[]
     print(len(letter))
     print(len(intrm))
-    for i in range(0,len(letras),1):
+    for i in range(0,len(letter),1):
         word.append(letter[i])
         
         word.append(intrm[i])
@@ -186,14 +186,14 @@ def formacionPalabras(morse):
             palabra=palabra+asignLetter(letra)
             letra=''
     return palabra
-    
+plt.close("all")
 #=============== Programa Principal ===============#
 signal=codeRecording()
-PlaySound('Audios/codigo.wav', SND_FILENAME|SND_ASYNC )
-# plt.figure(3)
+# PlaySound('Audios/claveElvin.wav', SND_FILENAME|SND_ASYNC )
+plt.figure(1)
 plt.plot(signal)
 morse=signIdentify(signal)
-#=============== Prueba formación de palabras ===============#
+# #=============== Prueba formación de palabras ===============#
 frase=formacionPalabras(morse)
 print(frase)     
     
